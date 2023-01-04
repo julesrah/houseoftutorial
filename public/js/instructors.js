@@ -1,11 +1,10 @@
 $(document).ready(function () {
-    $("#ptable").DataTable({
+    $("#gtable").DataTable({
         ajax: {
-           url: "/api/instructor/all",
-         //   url: "http://localhost:8000/api/v1/instructor",
+            url: "/api/instructors/all",
             dataSrc: "",
         },
-        dom: 'Bfrtip',
+        dom: '<"top"<"left-col"B><"center-col"l><"right-col"f>>rtip',
         buttons: [
             {
                 extend: "pdf",
@@ -15,28 +14,28 @@ $(document).ready(function () {
                 extend: "excel",
                 className: "btn btn-success glyphicon glyphicon-list-alt",
             },
-            {
+             {
                 text: "Add Instructor",
                 className: "btn btn-success",
                 action: function (e, dt, node, config) {
-                    $("#pform").trigger("reset");
+                    $("#gform").trigger("reset");
                     $("#instructorModal").modal("show");
                 },
             },
+        
         ],
         columns: [
             {
                 data: "id",
             },
             {
-                data: "name",
+                data: "instructor_name",
             },
-
             {
                 data: "specialty",
             },
             {
-                data: "description",
+                data: "instructor_description",
             },
             {
                 data: "status",
@@ -47,283 +46,180 @@ $(document).ready(function () {
             {
                 data: "phonenumber",
             },
-            
-            {
-                data: null,
-                 render: function (data,type,JsonResultRow,row) {
-                     return '<img src="storage/' + JsonResultRow.imagePath + '" width="125px" height="125px">';
-                 }, 
-            },
-
             {
                 data: null,
                 render: function (data, type, row) {
-                    return "<a href='#' data-bs-toggle='modal' class='editBtn' data-bs-target='#editModal' id='editbtn' data-id=" +
-                        data.id +"><i class='fa-solid fa-pen-to-square' aria-hidden='true' style='font-size:24px' ></i></a>   <a href='#' class='deletebtn' id='deletebtn' data-id=" + data.id + "><i class='fa-regular fa-trash-can' style='font-size:24px; color:red'></a></i>";
+                    console.log(data.imagePath)
+                    return `<img src= "storage/${data.imagePath}" "height="125px" width="125px">`;
+                },
+            },
+              {
+                data: null,
+                render: function (data, type, row) {
+                    return "<a href='#' class='editBtn' id='editbtn' data-id=" +
+                        data.id +
+                        "><i class='fa-solid fa-pen-to-square' aria-hidden='true' style='font-size:24px' ></i></a><a href='#' class='deletebtn' data-id=" + data.id + "><i class='fa-solid fa-trash-can' style='font-size:24px; color:red; margin-left:15px;'></a></i>";
                 },
             },
         ],
     });
 
-    $("#ptable tbody").on("click", "a.editBtn", function (e) {
-        e.preventDefault();
-        var id = $(this).data('id');
-        $('#editModal').modal('show');
-        
-        $.ajax({
-            type: "GET",
-            url: "api/instructor/" + id + "/edit",
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-            dataType: "json",
-            success: function(data){
-                   console.log(data);
-                //    $("#iuser_id").val(data.user_id);
-                   $("#iname").val(data.name);
-                   $("#ispecialty").val(data.specialty);
-                   $("#idescription").val(data.description);
-                   $("#istatus").val(data.status);
-                   $("#iaddress").val(data.address);
-                   $("#iphonenumber").val(data.phonenumber);
-                   $("#imagePath").val(data.imagePath);
-                },
-                error: function(){
-                    console.log('AJAX load did not work');
-                    alert("error");
-                }
+
+$("#instructorSubmit").on("click", function (e) {
+    e.preventDefault();
+    var data = $("#gform")[0];
+    console.log(data);
+    let formData = new FormData(data);
+    console.log(formData);
+    for (var pair of formData.entries()) {
+        console.log(pair[0] + "," + pair[1]);
+    }
+
+    $.ajax({
+        type: "POST",
+        url: "/api/instructors/store",
+        data: formData,
+        contentType: false,
+        processData: false,
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        dataType: "json",
+        success: function (data) {
+            console.log(data);
+            var $gtable = $("#gtable").DataTable();
+            $gtable.row.add(data.instructor).draw(false);
+
+            bootbox.alert("Instructor created!", function() {
+                location.reload(true);
             });
+        },
+        error: function (error) {
+            console.log(error);
+        },
     });
-
-    $("#instructorModal").on("show.bs.modal", function (e) {
-        var id = $(e.relatedTarget).attr("data-id");
-        // console.log(id);
-        $("<input>")
-            .attr({ type: "hidden", id: "instructorid", name: "id", value: id })
-            .appendTo("#pform");
-        $.ajax({
-            type: "GET",
-            url: "/api/instructor/" + id + "/edit",
-            success: function (data) {
-                console.log(data);
-                $("#name").val(data.name);
-                $("#specialty").val(data.specialty);
-                $("#description").val(data.description);
-                $("#status").val(data.status);
-                $("#address").val(data.address);
-                $("#phonenumber").val(data.phonenumber);
-                $("#uploads").val(data.imagePath);
-            },
-            error: function () {
-                console.log("AJAX load did not work");
-                alert("error");
-            },
-        });
-    });
-
-    $("#instructorSubmit").on("click", function (e) {
-        var id = $("#instructorid").val();
-        var data = $("#pform")[0];
-        let formData = new FormData($("#pform")[0]);
-        $.ajax({
-            type: "POST", //PUT
-            url: "/api/instructor/" + id,
-            data: formData,
-            contentType: false,
-            processData: false,
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-            dataType: "json",
-            success: function (data) {
-                console.log(data);
-                $("#instructorModal").modal("hide");
-                var $ptable = $("#ptable").DataTable();
-                $ptable.row.add(data.instructors).draw(false); 
-            },
-            error: function (error) {
-                console.log(error);
-            },
-        });
-    });
-
-    $("#pbody").on("click", "a.editBtn", function (e) {
-        e.preventDefault();
-        var id = $(this).data('id');
-        $('#editModal').modal('show');
+});
 
 
-        $.ajax({
-            type: "GET",
-            url: "api/instructor/" + id + "/edit",
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-            dataType: "json",
-            success: function(data){
-                   console.log(data);
-                    $("#ename").val(data.name);
-                    $("#especialty").val(data.specialty);
-                    $("#edescription").val(data.description);
-                    $("#estatus").val(data.status);
-                    $("#eaddress").val(data.address);
-                    $("#ephonenumber").val(data.phonenumber);
-                   $("#imagePath").val(data.imagePath);
-                },
-                error: function(){
-                    console.log('AJAX load did not work');
-                    alert("error");
-                }
-            });
-        });
-    
-    $("#instructorbtn").on("click", function (e) {
-            e.preventDefault();
-            // $("#items").hide("slow");
-            $("#instructor").show();
-    });
+//EDIT
+$("#gtable tbody").on("click", "a.editBtn", function (e) {
+    e.preventDefault();
+    $("#instructorModal").modal("show");
+    var id = $(this).data("id");
 
     $.ajax({
         type: "GET",
-        url: "/api/instructor/all",
+        enctype: "multipart/form-data",
+        processData: false,
+        contentType: false,
+        cache: false,
+        url: "/api/instructors/" + id + "/edit",
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
         dataType: "json",
         success: function (data) {
-            // console.log(data);
-            $.each(data, function (key, value) {
-                // console.log(value);
-                id = value.id;
-                var tr = $("<tr>");
-                tr.append($("<td>").html(value.id));
-                tr.append($("<td>").html(value.name));
-                tr.append($("<td>").html(value.specialty));
-                tr.append($("<td>").html(value.description));
-                tr.append($("<td>").html(value.status));
-                tr.append($("<td>").html(value.address));
-                tr.append($("<td>").html(value.phonenumber));
-                tr.append($("<td>").html(value.imagePath));
-                tr.append(
-                    "<td align='center'><a href='#' data-bs-toggle='modal' data-bs-target='#editModal' id='editbtn' data-id=" +
-                        id +
-                        "><i class='fa fa-pencil-square-o' aria-hidden='true' style='font-size:24px' ></a></i></td>"
-                );
-                tr.append(
-                    "<td><a href='#'  class='deletebtn' data-id=" +
-                        id +
-                        "><i  class='fa fa-trash-o' style='font-size:24px; color:red' ></a></i></td>"
-                );
-                $("#tbody").append(tr);
-            });
+            console.log(data);
+                $("#id").val(data.id);
+                $("#instructor_name").val(data.instructor_name);
+                $("#specialty").val(data.specialty);
+                $("#instructor_description").val(data.instructor_description);
+                $("#status").val(data.status);
+                $("#address").val(data.address);
+                $("#phonenumber").val(data.phonenumber);
         },
-        error: function () {
-            console.log("AJAX load did not work");
-            alert("error");
+        error: function (error) {
+            console.log("error");
         },
     });
-    
-     $("#editModal").on("show.bs.modal", function (e) {
-            var id = $(e.relatedTarget).attr("data-id");
-            console.log(id);
-            $("<input>")
-                .attr({
-                    type: "hidden",
-                    id: "instructorid",
-                    name: "id",
-                    value: id,
-                })
-                .appendTo("#updateinstructor");
-            $.ajax({
-                type: "GET",
-                url: "/api/instructor/" + id + "/edit",
-                success: function (data) {
-                    console.log(data);
-                    $("#ename").val(data.name);
-                    $("#especialty").val(data.specialty);
-                    $("#edescription").val(data.description);
-                    $("#estatus").val(data.status);
-                    $("#eaddress").val(data.address);
-                    $("#ephonenumber").val(data.phonenumber);
-                    $("#imagePath").val(data.imagePath);
-                },
-                error: function () {
-                    console.log("AJAX load did not work");
-                    alert("error");
-                },
-            });
-    });
-    
-    $("#editModal").on("hidden.bs.modal", function (e) {
-            $("#updateinstructor").trigger("reset");
-            $("#instructorid").remove();
-    });
+});
 
-    $("#updatebtn").on("click", function (e) {
-        var id = $("#instructorid").val();
-        var data = $("#updateinstructor").serialize();
-        console.log(data);
-        $.ajax({
-            type: "PUT",
-            url: "/api/instructor/" + id,
-            data: data,
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+
+//instructor UPDATE
+$("#instructorUpdate").on("click", function (e) {
+    e.preventDefault();
+    var id = $("#id").val();
+    var data = $("#gform")[0];
+    let formData = new FormData(data);
+    console.log(formData);
+    for (var pair of formData.entries()) {
+        console.log(pair[0] + "," + pair[1]);
+    }
+    var table = $("#gtable").DataTable();
+    console.log(id);
+
+    $.ajax({
+        type: "POST",
+        url: "/api/instructors/" + id,
+        data: formData,
+        contentType: false,
+        processData: false,
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        dataType: "json",
+        success: function (data) {
+            console.log(data);
+            // $("#instructorModal").modal("hide");
+            // table.ajax.reload();
+            bootbox.alert("Instructor has been updated!", function() {
+                $("#instructorModal").modal("hide");
+                table.ajax.reload();
+            });
+        },
+        error: function (error) {
+            console.log(error);
+        },
+    });
+});
+
+
+//DELETE
+$("#gbody").on("click", ".deletebtn", function (e) {
+    var id = $(this).data("id");
+    var $tr = $(this).closest("tr");
+    // var id = $(e.relatedTarget).attr('id');
+    console.log(id);
+    e.preventDefault();
+    bootbox.confirm({
+        message: "Do you want to delete this instructor?",
+        buttons: {
+            confirm: {
+                label: "Yes",
+                className: "btn-success",
             },
-            dataType: "json",
-            success: function (data) {
-                console.log(data);
-                $("#editModal").each(function () {
-                    $(this).modal("hide");
-                    window.location.reload();
+            cancel: {
+                label: "No",
+                className: "btn-danger",
+            },
+        },
+        callback: function (result) {
+            if (result)
+                $.ajax({
+                    type: "DELETE",
+                    url: "/api/instructors/" + id,
+                    headers: {
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                            "content"
+                        ),
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        
+                        $tr.find("td").css('backgroundColor','hsl(0,100%,50%').fadeOut(2000, function () {
+                            $tr.remove();
+                        });
+                        
+                        
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    },
                 });
-            },
-            error: function (error) {
-                console.log(error);
-            },
-        });
+        },
     });
+});
 
-    $("#pbody").on("click", ".deletebtn", function (e) {
-        var id = $(this).data("id");
-        var $tr = $(this).closest("tr");
-        console.log(id);
-        e.preventDefault();
-        bootbox.confirm({
-            message: "Do you want to delete this instructor?",
-            buttons: {
-                confirm: {
-                    label: "Yes",
-                    className: "btn-success",
-                },
-                cancel: {
-                    label: "No",
-                    className: "btn-danger",
-                },
-            },
-            callback: function (result) {
-                if (result)
-                    $.ajax({
-                        type: "DELETE",
-                        url: "/api/instructor/" + id,
-                        headers: {
-                            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                                "content"
-                            ),
-                        },
-                        dataType: "json",
-                        success: function (data) {
-                            console.log(data);
-                            
-                            $tr.find("td").css('backgroundColor','hsl(0,100%,50%').fadeOut(2000, function () {
-                                $tr.remove();
-                            });
-                            
-                            
-                        },
-                        error: function (error) {
-                            console.log(error);
-                        },
-                    });
-            },
-          
-        });
-    });
+
 });

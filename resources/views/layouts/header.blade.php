@@ -39,6 +39,5 @@
 <script src="js/instruments.js"></script>
 <script src="js/instructors.js"></script>
 <script src="js/client.js"></script>
-<script src="js/damage.js"></script>
 <script src="js/service.js"></script>
 <!-- {{-- <script src="js/dashboard.js"></script> --}} -->

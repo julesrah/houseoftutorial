@@ -22,7 +22,6 @@ $(document).ready(function () {
                     $("#serviceModal").modal("show");
                 },
             },
-        
         ],
         columns: [
             {
@@ -33,6 +32,70 @@ $(document).ready(function () {
             },
             {
                 data: "instrument_id",
+            },
+            {
+                data: "servname",
+            },
+            {
+                data: "eventStarts",
+            },
+            {
+                data: "description",
+            },
+            {
+                data: "price",
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    console.log(data.imagePath)
+                    return `<img src= "storage/${data.imagePath}" "height="125px" width="125px">`;
+                },
+            },
+              {
+                data: null,
+                render: function (data, type, row) {
+                    return "<a href='#' class='editBtn' id='editbtn' data-id=" +
+                        data.id +
+                        "><i class='fa-solid fa-pen-to-square' aria-hidden='true' style='font-size:24px' ></i></a><a href='#' class='deletebtn' data-id=" + data.id + "><i class='fa-solid fa-trash-can' style='font-size:24px; color:red; margin-left:15px;'></a></i>";
+                },
+            },
+        ],
+    });
+
+    $("#dtable").DataTable({
+        ajax: {
+            url: "/api/services/all",
+            dataSrc: "",
+        },
+        dom: '<"top"<"left-col"B><"center-col"l><"right-col"f>>rtip',
+        buttons: [
+            {
+                extend: "pdf",
+                className: "btn btn-success glyphicon glyphicon-file",
+            },
+            {
+                extend: "excel",
+                className: "btn btn-success glyphicon glyphicon-list-alt",
+            },
+             {
+                text: "Add Service",
+                className: "btn btn-success",
+                action: function (e, dt, node, config) {
+                    $("#sform").trigger("reset");
+                    $("#serviceModal").modal("show");
+                },
+            },
+        ],
+        columns: [
+            {
+                data: "service_id",
+            },
+            {
+                data: "name",
+            },
+            {
+                data: "instrument_name",
             },
             {
                 data: "servname",

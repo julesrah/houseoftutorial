@@ -21,8 +21,7 @@ class serviceController extends Controller
      */
     public function index()
     {
-        // return View::make('service.index');
-        $instrument = instrument::pluck('name','id');
+        $instrument = instrument::pluck('instrument_name','id');
         $instructor = instructor::pluck('name','id');
         return View('service.index',[
             'instrument' => $instrument,
@@ -32,7 +31,12 @@ class serviceController extends Controller
 
     public function getServicesAll(Request $request)
     {
-            $services = service::orderBy('id', 'DESC')->get();
+            $services = DB::table('services')
+            ->leftJoin('instruments','instruments.id','=','services.instrument_id')
+            ->leftJoin('instructors','instructors.id','=','services.instructor_id')
+            ->select('services.*', 'services.id AS service_id', 'instruments.*', 'instructors.*')
+            ->get();
+            
             return response()->json($services);
             
     }
@@ -148,4 +152,36 @@ class serviceController extends Controller
         $data = array('success' => 'deleted', 'code' => '200');
         return response()->json($data);
     }
+
+    public function postCheckout(Request $request)
+    {
+        $services = json_decode($request->getContent(),true);
+
+        Log::info(print_r($items, true));
+          try {
+              DB::beginTransaction();
+              $order = new Order();
+              $client =  client::find(3);
+              $client->orders()->save($order);
+
+            foreach($services as $service) {
+
+               $id = $service['service_id'];
+
+               $order->services()->attach($order->service_orderinfo_id,['slot'=> $service['slot'],'service_id'=>$id]);
+
+               $sessions = session::find($id);
+               $sessions->slot = $sessions->slot - $service['slot'];
+               $sessions->save();
+            }
+            
+          }
+          catch (\Exception $e) {
+              DB::rollback();
+              return response()->json(array('status' => 'Session failed','code'=>409,'error'=>$e->getMessage()));
+              }
+      
+          DB::commit();
+          return response()->json(array('status' => 'Session Success','code'=>200,'order id'=>$order->service_orderinfo_id));
+          }
 }

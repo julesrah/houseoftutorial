@@ -1,9 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\damageController;
+use App\Http\Controllers\clientController;
 use App\Http\Controllers\instrumentController;
 use App\Http\Controllers\serviceController;
+use App\Http\Controllers\instructorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,13 +21,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('instructor', 'instructorController');
-Route::get('/instructor-index','instructorController@getInstructorsAll');
-
-Route::resource('client', 'clientController');
-Route::get('/client-index','clientController@getClientsAll');
-
-
 Route::GET('instrument', [instrumentController::class, 'index'])->name('instrument.index');
-Route::GET('damage', [damageController::class, 'index'])->name('damage.index');
+Route::GET('instructor', [instructorController::class, 'index'])->name('instructor.index');
+Route::GET('client', [clientController::class, 'index'])->name('client.index');
 Route::GET('service', [serviceController::class, 'index'])->name('service.index');

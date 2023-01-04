@@ -2,8 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\damageController;
+use App\Http\Controllers\clientController;
 use App\Http\Controllers\instrumentController;
+use App\Http\Controllers\instructorController;
 use App\Http\Controllers\serviceController;
 
 /*
@@ -36,6 +37,22 @@ Route::delete('instruments/{id}', [instrumentController::class, 'destroy'])->nam
 
 
 
+//INSTRUCTORS
+Route::get('/instructors/all', [instructorController::class, 'getInstructorsAll'])->name('instructor.all');
+
+//store instructors
+Route::post('/instructors/store', [instructorController::class, 'store'])->name('instructor.store');
+
+//update instructors
+Route::get('/instructors/{id}/edit', [instructorController::class, 'edit'])->name('instructor.edit');
+Route::post('/instructors/{id}', [instructorController::class, 'update'])->name('instructor.update');
+
+//delete instructors
+Route::delete('instructors/{id}', [instructorController::class, 'destroy'])->name('instructor.destroy');
+
+
+
+
 //SERVICES
 Route::get('/services/all', [serviceController::class, 'getServicesAll'])->name('service.all');
 
@@ -51,22 +68,15 @@ Route::delete('services/{id}', [serviceController::class, 'destroy'])->name('ser
 
 
 
+//CLIENT
+Route::get('/clients/all', [clientController::class, 'getClientsAll'])->name('client.all');
 
-Route::get('/instructor/all',['uses' => 'instructorController@getInstructorsAll','as' => 'instructor.getInstructorsAll'] );
-Route::resource('instructor', 'instructorController');
+//store clients
+Route::post('/clients/store', [clientController::class, 'store'])->name('client.store');
 
-Route::get('/client/all',['uses' => 'clientController@getClientsAll','as' => 'client.getClientsAll'] );
-Route::resource('client', 'clientController');
+//update clients
+Route::get('/clients/{id}/edit', [clientController::class, 'edit'])->name('client.edit');
+Route::post('/clients/{id}', [clientController::class, 'update'])->name('client.update');
 
-//DAMAGES
-Route::get('/damages/all', [damageController::class, 'getDamagesAll'])->name('damage.all');
-
-//store damages
-Route::post('/damages/store', [damageController::class, 'store'])->name('damage.store');
-
-//update damages
-Route::get('/damages/{id}/edit', [damageController::class, 'edit'])->name('damage.edit');
-Route::post('/damages/{id}', [damageController::class, 'update'])->name('damage.update');
-
-//delete damages
-Route::delete('damages/{id}', [damageController::class, 'destroy'])->name('damage.destroy');
+//delete clients
+Route::delete('clients/{id}', [clientController::class, 'destroy'])->name('client.destroy');

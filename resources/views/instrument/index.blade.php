@@ -37,8 +37,8 @@
                     </div>
               
                     <div class="form-group">
-                        <label for="name" class="control-label">Name</label>
-                        <input type="text" class="form-control" id="name" name="name">
+                        <label for="instrument_name" class="control-label">Name</label>
+                        <input type="text" class="form-control" id="instrument_name" name="instrument_name">
                     </div>
 
                     <div class="form-group">

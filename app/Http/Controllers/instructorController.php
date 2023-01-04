@@ -60,9 +60,9 @@ class instructorController extends Controller
 
         $instructor = new instructor;
         $instructor->user_id = 25;
-        $instructor->name = $request->name;
+        $instructor->instructor_name = $request->instructor_name;
         $instructor->specialty = $request->specialty;
-        $instructor->description = $request->description;
+        $instructor->instructor_description = $request->instructor_description;
         $instructor->status = $request->status;
         $instructor->address = $request->address;
         $instructor->phonenumber = $request->phonenumber;
@@ -112,8 +112,22 @@ class instructorController extends Controller
     public function update(Request $request, $id)
     {
         $instructor = instructor::find($id);
-        $instructor = $instructor->update($request->all());
-        return response()->json($instructor);
+
+        $instructor->user_id = 25;
+        $instructor->instructor_name = $request->instructor_name;
+        $instructor->specialty = $request->specialty;
+        $instructor->instructor_description = $request->instructor_description;
+        $instructor->status = $request->status;
+        $instructor->address = $request->address;
+        $instructor->phonenumber = $request->phonenumber;
+
+        $files = $request->file('uploads');
+
+        $instructor->imagePath = 'images/'. $files->getClientOriginalName();
+        $instructor->save();
+
+        Storage::put('public/images/'.$files->getClientOriginalName(), file_get_contents($files));
+        return response()->json(["success" => "instructor updated successfully.", "instructor" => $instructor, "status" => 200]);
     }
 
     /**

@@ -13,7 +13,7 @@ class instrument extends Model
     public $primaryKey = "id";
     
     protected $fillable = [
-        "name",
+        "instrument_name",
         "type",
         "description",
         "condition",

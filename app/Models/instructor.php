@@ -13,10 +13,10 @@ class instructor extends Model
     public $primaryKey = "id";
     
     protected $fillable = [
-        "name",
+        "instructor_name",
         "user_id",
         "specialty",
-        "description",
+        "instructor_description",
         "status",
         "address",
         "phonenumber",

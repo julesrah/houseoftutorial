@@ -29,7 +29,7 @@ $(document).ready(function () {
                 data: "id",
             },
             {
-                data: "name",
+                data: "instrument_name",
             },
 
             {
@@ -116,7 +116,7 @@ $("#rtable tbody").on("click", "a.editBtn", function (e) {
         success: function (data) {
             console.log(data);
                 $("#id").val(data.id);
-                $("#name").val(data.name);
+                $("#instrument_name").val(data.instrument_name);
                 $("#type").val(data.type);
                 $("#description").val(data.description);
                 $("#condition").val(data.condition);

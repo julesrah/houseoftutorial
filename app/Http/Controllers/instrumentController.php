@@ -59,7 +59,7 @@ class instrumentController extends Controller
     {
 
         $instrument = new Instrument;
-        $instrument->name = $request->name;
+        $instrument->instrument_name = $request->instrument_name;
         $instrument->type = $request->type;
         $instrument->description = $request->description;
         $instrument->condition = $request->condition;
@@ -108,7 +108,7 @@ class instrumentController extends Controller
     {
         $instrument = instrument::find($id);
 
-        $instrument->name = $request->name;
+        $instrument->instrument_name = $request->instrument_name;
         $instrument->type = $request->type;
         $instrument->description = $request->description;
         $instrument->condition = $request->condition;
