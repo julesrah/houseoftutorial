@@ -110,8 +110,24 @@ class clientController extends Controller
     public function update(Request $request, $id)
     {
         $client = client::find($id);
-        $client = $client->update($request->all());
-        return response()->json($client);
+        $client->user_id = 25;
+        $client->title = $request->title;
+        $client->firstName = $request->firstName;
+        $client->lastName = $request->lastName;
+        $client->age = $request->age;
+        $client->address = $request->address;
+        $client->sex = $request->sex;
+        $client->phonenumber = $request->phonenumber;
+
+        $files = $request->file('uploads');
+
+        $client->imagePath = 'images/' . time() . '-' . $files->getClientOriginalName();
+        $client->save();
+
+        $data = array('status' => 'saved');
+        Storage::put('public/images/' . time() . '-' . $files->getClientOriginalName(), file_get_contents($files));
+
+        return response()->json(["success" => "Client updated Successfully.", "clients" => $client, "status" => 200]);
     }
 
     /**

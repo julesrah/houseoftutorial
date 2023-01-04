@@ -22,7 +22,7 @@ class serviceController extends Controller
     public function index()
     {
         $instrument = instrument::pluck('instrument_name','id');
-        $instructor = instructor::pluck('name','id');
+        $instructor = instructor::pluck('instructor_name','id');
         return View('service.index',[
             'instrument' => $instrument,
             'instructor' => $instructor,
@@ -34,7 +34,7 @@ class serviceController extends Controller
             $services = DB::table('services')
             ->leftJoin('instruments','instruments.id','=','services.instrument_id')
             ->leftJoin('instructors','instructors.id','=','services.instructor_id')
-            ->select('services.*', 'services.id AS service_id', 'instruments.*', 'instructors.*')
+            ->select('services.*', 'services.id AS service_id', 'services.description AS service_desc', 'services.imagePath AS service_img', 'instruments.*', 'instructors.*')
             ->get();
             
             return response()->json($services);

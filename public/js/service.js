@@ -92,7 +92,7 @@ $(document).ready(function () {
                 data: "service_id",
             },
             {
-                data: "name",
+                data: "instructor_name",
             },
             {
                 data: "instrument_name",
@@ -104,7 +104,7 @@ $(document).ready(function () {
                 data: "eventStarts",
             },
             {
-                data: "description",
+                data: "service_desc",
             },
             {
                 data: "price",
@@ -113,7 +113,7 @@ $(document).ready(function () {
                 data: null,
                 render: function (data, type, row) {
                     console.log(data.imagePath)
-                    return `<img src= "storage/${data.imagePath}" "height="125px" width="125px">`;
+                    return `<img src= "storage/${data.service_img}" "height="125px" width="125px">`;
                 },
             },
               {

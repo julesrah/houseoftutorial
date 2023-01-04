@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="container">
-    <table id="stable" class="table table-striped table-hover">
+    <table id="dtable" class="table table-striped table-hover">
       <thead>
                 <tr>
                     <th>Service ID</th>
