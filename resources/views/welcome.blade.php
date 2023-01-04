@@ -85,8 +85,8 @@ body, html {
       <a href="javascript:void(0)" onclick="openMenu(event, 'Instructors');" id="myLink">
         <div class="w3-col s6 tablink">Our Instructors</div>
       </a>
-      <a href="javascript:void(0)" onclick="openMenu(event, 'Drinks');">
-        <div class="w3-col s6 tablink">Drink</div>
+      <a href="javascript:void(0)" onclick="openMenu(event, 'Branches');">
+        <div class="w3-col s6 tablink">Our Branches</div>
       </a>
     </div>
 
@@ -107,21 +107,19 @@ body, html {
       <p class="w3-text-grey">and others</p>
     </div>
 
-    <div id="Drinks" class="w3-container menu w3-padding-48 w3-card">
-      <h5>Coffee</h5>
-      <p class="w3-text-grey">Regular coffee 2.50</p><br>
+    <div id="Branches" class="w3-container menu w3-padding-48 w3-card">
+      <h5>Taguig, Metro Manila</h5>
+      <p class="w3-text-grey">main branch</p><br>
     
-      <h5>Chocolato</h5>
-      <p class="w3-text-grey">Chocolate espresso with milk 4.50</p><br>
+      <h5>Bacoor, Cavite</h5>
+      <p class="w3-text-grey">Managed by Jules Horca</p><br>
     
-      <h5>Corretto</h5>
-      <p class="w3-text-grey">Whiskey and coffee 5.00</p><br>
+      <h5>Makati, Metro Manila</h5>
+      <p class="w3-text-grey">Managed by Meantonette Medalla</p><br>
     
-      <h5>Iced tea</h5>
-      <p class="w3-text-grey">Hot tea, except not hot 3.00</p><br>
+      <h5>Nasugbu, Batangas</h5>
+      <p class="w3-text-grey">Managed by Allanis Grace</p><br>
     
-      <h5>Soda</h5>
-      <p class="w3-text-grey">Coke, Sprite, Fanta, etc. 2.50</p>
     </div>  
     <img src="storage/images/note.jpg" style="width:100%;max-width:1000px;margin-top:32px;">
   </div>
@@ -135,5 +133,25 @@ body, html {
     <img src="storage/images/loc.png" class="w3-image" style="width:100%">
     <p><span class="w3-tag">FYI!</span> We offer full-service tutorial for any time, weekdays or weekends. We understand your needs and we will give quality service to satisfy the biggest criteria of them all.</p>
 
+
+<script>
+// Tabbed Menu
+function openMenu(evt, menuName) {
+  var i, x, tablinks;
+  x = document.getElementsByClassName("menu");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < x.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" w3-dark-grey", "");
+  }
+  document.getElementById(menuName).style.display = "block";
+  evt.currentTarget.firstElementChild.className += " w3-dark-grey";
+}
+document.getElementById("myLink").click();
+</script>
+
 </body>
 </html>
+

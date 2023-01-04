@@ -6,6 +6,7 @@ use App\Http\Controllers\clientController;
 use App\Http\Controllers\instrumentController;
 use App\Http\Controllers\instructorController;
 use App\Http\Controllers\serviceController;
+use App\Http\Controllers\API\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,3 +81,10 @@ Route::post('/clients/{id}', [clientController::class, 'update'])->name('client.
 
 //delete clients
 Route::delete('clients/{id}', [clientController::class, 'destroy'])->name('client.destroy');
+
+
+Route::post('login', [UserController::class, 'userLogin']);
+
+Route::group(['middleware' => 'auth:api'],function(){
+    Route::get('profile_details', [UserController::class, 'userDetails']);
+});
