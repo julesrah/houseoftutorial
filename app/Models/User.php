@@ -15,13 +15,18 @@ class User extends Authenticatable
     // use HasApiTokens, HasFactory, Notifiable;
     use HasApiTokens, Notifiable;
 
+    public $table = "users";
+    public $timestamps = true;
+    public $primaryKey = "id";
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'userName',
+        'role',
         'email',
         'password',
     ];
@@ -44,4 +49,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function AauthAcessToken(){
+        return $this->hasMany('App\Models\OauthAccessToken');
+    }
 }

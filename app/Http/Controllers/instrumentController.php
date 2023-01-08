@@ -57,6 +57,17 @@ class instrumentController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'instrument_name' => 'required|alpha|max:255',
+            'type' => 'required|alpha|max:255',
+            'description' => 'required|alpha|max:255',
+            'condition' => 'required|alpha|max:255',
+            'imagePath' => 'mimes:png, jpg, gif, svg',
+
+        ], [
+            'instrument_name.alpha' => 'Must contain alphabets only.'
+        ]
+        );
 
         $instrument = new Instrument;
         $instrument->instrument_name = $request->instrument_name;

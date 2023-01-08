@@ -23,4 +23,8 @@ class client extends Model
         "phonenumber",
         "imagePath"
     ];
+
+    public function orders() {
+        return $this->hasMany('App\Models\orderinfo', 'client_id');
+    }
 }

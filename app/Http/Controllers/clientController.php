@@ -56,6 +56,19 @@ class clientController extends Controller
      */
     public function store(Request $request)
     {
+
+        $request->validate([
+            'title' => 'required|alpha|max:255',
+            'firstName' => 'required|max:255',
+            'lastName' => 'required|max:255',
+            'age' => 'required|numeric|max:255',
+            'address' => 'required|max:255',
+            'sex' => 'required|max:255',
+            'phonenumber' => 'required|numeric|max:255',
+            'imagePath' => 'mimes:png, jpg, gif, svg',
+
+        ]);
+
         $client = new client;
         $client->user_id = 25;
         $client->title = $request->title;

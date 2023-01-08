@@ -37,18 +37,6 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
-    protected function unauthenticated($request, AuthenticationException $exception) 
-    {
-        return response()-json(
-            [
-                'errors' => [
-                    'status' => 401,
-                    'message' => 'Unathenticated',
-                ], 401
-            ]
-            );
-    }
-
     /**
      * Register the exception handling callbacks for the application.
      *

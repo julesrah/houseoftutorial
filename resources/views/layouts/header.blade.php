@@ -40,4 +40,5 @@
 <script src="js/instructors.js"></script>
 <script src="js/client.js"></script>
 <script src="js/service.js"></script>
+<script src="js/dashboard.js"></script>
 <!-- {{-- <script src="js/dashboard.js"></script> --}} -->

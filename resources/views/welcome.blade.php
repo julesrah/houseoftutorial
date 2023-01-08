@@ -1,3 +1,7 @@
+@include('partials.clientRegister')
+@include('partials.login')
+@include('partials.adminRegister')
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,6 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous"/>
 <style>
 body, html {
   height: 100%;
@@ -26,21 +31,32 @@ body, html {
 </head>
 <body>
 
+
 <!-- Links (sit on top) -->
 <div class="w3-top">
   <div class="w3-row w3-padding w3-black">
     <div class="w3-col s3">
-      <a href="{{ url('/instrument') }}" class="w3-button w3-block w3-black">SHOW INSTRUMENT</a>
+      <a href="#home" class="w3-button w3-block w3-black">Home</a>
     </div>
     <div class="w3-col s3">
-      <a href="{{ url('/instructor') }}" class="w3-button w3-block w3-black">SHOW INSTRUCTORS</a>
+      <a href="#about" class="w3-button w3-block w3-black">About</a>
     </div>
     <div class="w3-col s3">
-      <a href="{{ url('/client') }}" class="w3-button w3-block w3-black">SHOW CLIENT</a>
+    <a href="{{ url('/dashboard') }}"class="w3-button w3-block w3-black">Dashboard</a>
     </div>
-    <div class="w3-col s3">
-      <a href="#where" class="w3-button w3-block w3-black">SHOW SERVICES</a>
-    </div>
+    
+
+        <div class="w3-col s3 w3-dropdown-hover">
+        <button class="w3-button">Login/ Signup</button>
+        <div class="w3-dropdown-content w3-bar-block w3-card-4">
+          
+          <a class="w3-bar-item w3-button" style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#loginModal">{{ __('Login') }}</a>
+          <a class="w3-bar-item w3-button" style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#clregisterModal">{{ __('Client Registration') }}</a>
+          <a class="w3-bar-item w3-button" style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#adregisterModal">{{ __('Admin Registration') }}</a>
+        </div>
+
+
+    </div>  
   </div>
 </div>
 
@@ -151,6 +167,8 @@ function openMenu(evt, menuName) {
 }
 document.getElementById("myLink").click();
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
 
 </body>
 </html>

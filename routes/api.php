@@ -6,6 +6,8 @@ use App\Http\Controllers\clientController;
 use App\Http\Controllers\instrumentController;
 use App\Http\Controllers\instructorController;
 use App\Http\Controllers\serviceController;
+use App\Http\Controllers\recordController;
+use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\API\UserController;
 
 /*
@@ -19,9 +21,17 @@ use App\Http\Controllers\API\UserController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+//CLIENT SIGN UP
+Route::post('clientRegister', [UserController::class, 'clientRegister'])->name('client.register');
+
+//ADMIN SIGN UP
+Route::post('adminRegister', [UserController::class, 'adminRegister'])->name('admin.register');
+
+Route::post('login', [UserController::class, 'login'])->name('login');
 
 //INSTRUMENTS
 Route::get('/instruments/all', [instrumentController::class, 'getInstrumentsAll'])->name('instrument.all');
@@ -52,8 +62,6 @@ Route::post('/instructors/{id}', [instructorController::class, 'update'])->name(
 Route::delete('instructors/{id}', [instructorController::class, 'destroy'])->name('instructor.destroy');
 
 
-
-
 //SERVICES
 Route::get('/services/all', [serviceController::class, 'getServicesAll'])->name('service.all');
 
@@ -82,9 +90,35 @@ Route::post('/clients/{id}', [clientController::class, 'update'])->name('client.
 //delete clients
 Route::delete('clients/{id}', [clientController::class, 'destroy'])->name('client.destroy');
 
-
-Route::post('login', [UserController::class, 'userLogin']);
-
 Route::group(['middleware' => 'auth:api'],function(){
-    Route::get('profile_details', [UserController::class, 'userDetails']);
+    Route::post('logout', [UserController::class,'logout'])->name('logout');
 });
+
+
+
+//RECORDS
+Route::get('/records/all', [recordController::class, 'getRecordsAll'])->name('record.all');
+Route::post('/record/store', [recordController::class, 'store'])->name('record.store');
+
+//Service Checkout
+Route::post('/service/checkout',[
+    'uses' => 'serviceController@postCheckout',
+    'as' => 'checkout'
+]);
+
+// Route::get('/saleschart', 'DashboardController@salesChart');
+
+// Route::get('/dashboard/saleschart', [recordController::class, 'salesChart'])->name('salesChart.all');
+// Route::get('/saleschart', [DashboardController::class, 'salesChart'])->name('saleschart');
+
+
+
+Route::get('/dashboard/saleschart', [DashboardController::class, 'salesChart'])->name('saleschart.all');
+
+Route::get('/dashboard/serviceChart', [DashboardController::class, 'serviceChart'])->name('serviceChart.all');
+
+Route::get('/dashboard/instrumentChart', [DashboardController::class, 'instrumentChart'])->name('instrumentChart.all');
+
+Route::get('/dashboard/instructorChart', [DashboardController::class, 'instructorChart'])->name('instructorChart.all');
+
+Route::get('/dashboard/conditionChart', [DashboardController::class, 'conditionChart'])->name('conditionChart.all');

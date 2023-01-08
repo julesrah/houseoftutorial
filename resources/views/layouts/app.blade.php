@@ -25,24 +25,39 @@ body, html {
 </style>
 </head>
 <body>
-                        @guest
+                        @auth
 
                         <div class="w3-top">
                             <div class="w3-row w3-padding w3-black">
                                 <div class="w3-col s2">
                                 <a href="{{ url('/') }}" class="w3-button w3-block w3-black">HOME</a>
                                 </div>
+
                                 <div class="w3-col s2">
-                                <a href="{{ url('/instrument') }}" class="w3-button w3-block w3-black">SHOW INSTRUMENT</a>
+                                <a href="{{ url('/shop') }}" class="w3-button w3-block w3-black">MAKE AN APPOINTMENT</a>
                                 </div>
-                                <div class="w3-col s2">
-                                <a href="{{ url('/instructor') }}" class="w3-button w3-block w3-black">SHOW INSTRUCTORS</a>
+
+                                <div class="w3-col s3 w3-dropdown-hover">
+                                    <button class="w3-button w3-block w3-black">SHOW</button>
+                                    <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                                    <a href="{{ url('/instrument') }}" id= "SHinstrument" class="w3-button w3-block w3-black">SHOW INSTRUMENT</a>
+                                    <a href="{{ url('/instructor') }}" id= "SHinstructor" class="w3-button w3-block w3-black">SHOW INSTRUCTORS</a>
+                                    <a href="{{ url('/client') }}" id= "SHclient" class="w3-button w3-block w3-black">SHOW CLIENT</a>
+                                    <a href="{{ url('/service') }}" id= "SHservice" class="w3-button w3-block w3-black">SHOW SERVICES</a>
+                                    <!-- <a href="{{ url('/record') }}" id= "SHservice" class="w3-button w3-block w3-black">SHOW RECORDS</a> -->
+                                    </div>
                                 </div>
-                                <div class="w3-col s2">
-                                <a href="{{ url('/client') }}" class="w3-button w3-block w3-black">SHOW CLIENT</a>
-                                </div>
-                                <div class="w3-col s2">
-                                <a href="{{ url('/service') }}" class="w3-button w3-block w3-black">SHOW SERVICES</a>
+
+                                <div class="w3-col s3">
+                                    <a class="w3-button w3-block w3-black" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        {{ __('LOGOUT') }}
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
                                 </div>
                             </div>
                             </div>
@@ -50,23 +65,19 @@ body, html {
 
 
                         <li class="nav-item">   
-                          <a class="nav-link" style="font-size:50px;color:white;">|</a>
+                          <a class="nav-link" style="font-size:25px;color:white;"></a>
                         </li>
-
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="av-link btn btn-outline-success btn-lg" style="font-family:impact; font-size:20px;color:whitesmoke;" href="#">{{ __('Login') }}</a>
-                                </li>
-                            @endif
-           
-
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="av-link btn btn-outline-success btn-lg" style="font-family:impact; font-size:20px;color:whitesmoke;" href="#">{{ __('Register') }}</a>
-                                </li>
-                            @endif
                         @else
-                        @endguest
+
+                        <div class="w3-top">
+                            <div class="w3-row w3-padding w3-black">
+                                <div class="w3-col s2">
+                                <a href="{{ url('/') }}" class="w3-button w3-block w3-black">HOME</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        @endauth
                     </ul>
                 <!-- </div> -->
             </div>
@@ -74,6 +85,7 @@ body, html {
 
         <main class="py-4">
             @yield('content')
+            @yield('scripts')
         </main>
     </div>
 </body>

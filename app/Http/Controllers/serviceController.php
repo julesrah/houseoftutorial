@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\service;
+use App\Models\orderinfo;
 use App\Models\instrument;
 use App\Models\instructor;
 use Illuminate\Support\Facades\View;
@@ -41,11 +42,8 @@ class serviceController extends Controller
             
     }
 
-    public function getService(Request $request, $id){
-        // if ($request->ajax()) {
-            $service = service::where('id',$id)->first();
-             return response()->json($service);
-        // }
+    public function getService(){
+        return view('service.index');
     }
 
     /**
@@ -153,35 +151,74 @@ class serviceController extends Controller
         return response()->json($data);
     }
 
-    public function postCheckout(Request $request)
-    {
-        $services = json_decode($request->getContent(),true);
+    // public function postCheckout(Request $request)
+    // {
+    //     $services = json_decode($request->getContent(),true);
 
-        Log::info(print_r($items, true));
-          try {
-              DB::beginTransaction();
-              $order = new Order();
-              $client =  client::find(3);
-              $client->orders()->save($order);
+    //     Log::info(print_r($items, true));
+    //       try {
+    //           DB::beginTransaction();
+    //           $order = new Order();
+    //           $client =  client::find(3);
+    //           $client->orders()->save($order);
 
-            foreach($services as $service) {
+    //         foreach($services as $service) {
 
-               $id = $service['service_id'];
+    //            $id = $service['service_id'];
 
-               $order->services()->attach($order->service_orderinfo_id,['slot'=> $service['slot'],'service_id'=>$id]);
+    //            $order->services()->attach($order->service_orderinfo_id,['slot'=> $service['slot'],'service_id'=>$id]);
 
-               $sessions = session::find($id);
-               $sessions->slot = $sessions->slot - $service['slot'];
-               $sessions->save();
-            }
+    //            $sessions = session::find($id);
+    //            $sessions->slot = $sessions->slot - $service['slot'];
+    //            $sessions->save();
+    //         }
             
-          }
-          catch (\Exception $e) {
-              DB::rollback();
-              return response()->json(array('status' => 'Session failed','code'=>409,'error'=>$e->getMessage()));
-              }
+    //       }
+    //       catch (\Exception $e) {
+    //           DB::rollback();
+    //           return response()->json(array('status' => 'Session failed','code'=>409,'error'=>$e->getMessage()));
+    //           }
       
-          DB::commit();
-          return response()->json(array('status' => 'Session Success','code'=>200,'order id'=>$order->service_orderinfo_id));
+    //       DB::commit();
+    //       return response()->json(array('status' => 'Session Success','code'=>200,'order id'=>$order->service_orderinfo_id));
+    //       }
+
+    public function postCheckout(Request $request){
+        $services = json_decode($request->getContent(),true);
+        Log::info(print_r($services, true));
+
+          try {
+            DB::beginTransaction();
+            $order = new orderinfo();
+
+            // $customers = Customer::where('user_id',Auth()->id())->first();
+            // $customer = $customers->id;
+            // $client = $clients = 1;
+
+            // $clients = client::where('user_id',Auth()->id())->first();
+            // $order->client_id = $clients->id;
+            $order->client_id = 1;
+            $order->schedule = now();
+            $order->status = 'on going';
+            $order->save();
+
+            $last = DB::getPdo()->lastInsertId();
+            
+            foreach($services as $service) {
+               $id = $service['id'];
+
+               DB::table('service_orderline')->insert(
+                ['service_orderinfo_id' => $last, 
+                 'service_id' => $id,
+                 'session'=> $service['session']
+                ]
+                );
+            }
           }
+        catch (\Exception $e) {
+              DB::rollback();
+              return response()->json(array('status' => 'Order failed','code'=>409,'error'=>$e->getMessage()));
+        }
+          DB::commit();
+    }
 }

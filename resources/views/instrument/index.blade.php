@@ -2,6 +2,14 @@
 @extends('layouts.app')
 @section('content')
 
+              @if (count($errors) > 0)
+                <div class="alert alert-danger">
+                    @foreach ($errors->all() as $error)
+                        <p>{{ $error }}</p>
+                    @endforeach
+                </div>
+            @endif
+
 <div class="container">
     <table id="rtable" class="table table-striped table-hover">
       <thead>
@@ -34,11 +42,18 @@
 
                     <div class="form-group">
                         <input type="hidden" class="form-control" id="id" name="id">
+                        
                     </div>
               
                     <div class="form-group">
                         <label for="instrument_name" class="control-label">Name</label>
                         <input type="text" class="form-control" id="instrument_name" name="instrument_name">
+                        <!-- @error('instrument_name')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror -->
+                        @if ($errors->has('instrument_name'))
+                          <span class="text-danger">{{ $errors->first('instrument_name') }} </span>
+                        @endif
                     </div>
 
                     <div class="form-group">

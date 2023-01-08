@@ -1,0 +1,157 @@
+body {
+	padding: 0;
+	margin: 0;
+  height: fit-content;
+  width: 100%;
+  background-image:
+       url(../css/bg.jfif);
+   background-size: cover;
+   background-repeat: repeat-y;
+   display: grid;
+   grid-template-rows: 5rem auto;
+	 /* background: linear-gradient(to bottom,  white 0%, black 100%); */
+}
+
+header {
+  height: 100px;
+}
+
+h1 {
+  float: left;
+  margin: 0;
+}
+
+h2 {
+  margin: 0 0 50px;
+}
+
+#cart-container {
+  float: right;
+  width: 210px;
+  position: relative;
+}
+
+#serviceCount {
+  position: absolute;
+  display: none;
+  top: -10px;
+  left: -10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: red;
+  color: white;
+  text-align: center;
+}
+
+nav {
+  margin-bottom: 30px;
+}
+
+nav ul {
+  list-style: none;
+  overflow: auto;
+  width: 100%;
+  background: #986737;
+}
+
+nav ul li {
+  float: left;
+  padding: 5px 20px;
+}
+
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+nav ul li:hover {
+  color: #ffffff;
+  background: #cccccc;
+}
+
+nav ul li:hover a {
+  color: #ffffff;
+}
+
+img {
+  width: 100%;
+}
+
+.service {
+  width: 31%;
+  float: left;
+  margin: 1%;
+}
+
+.serviceText p {
+  margin-bottom: 20px;
+}
+
+.price-container {
+  margin-top: 20px;
+}
+
+i:hover {
+  cursor: pointer;
+}
+
+#shoppingCart {
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: none;
+  position: absolute;
+  z-index: 9999;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+#cartServicesContainer {
+  position: relative;
+  width: 600px;
+  left: 50%;
+  top: 150px;
+  margin-left: -300px;
+  padding: 40px;
+  box-shadow: 0 0 10px rgb(255, 255, 255);
+  background: #ffdfa0;
+  overflow: auto;
+}
+
+#cartServicesContainer i {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  
+}
+
+#cartServicesContainer .serviceDetails {
+  overflow: auto;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+#cartServicesContainer .serviceImage {
+  float: left;
+  width: 260px;
+  padding: 0 40px;
+}
+
+#cartServicesContainer .serviceText {
+  float: right;
+  width: 260px;
+  padding: 0 40px;
+}
+
+#cartServicesContainer .serviceText .price-container {
+  margin-top: 0;
+}
+
+.removeService {
+  margin-left: 40px;
+}
+
+h1 {
+  color: #fff;
+}
